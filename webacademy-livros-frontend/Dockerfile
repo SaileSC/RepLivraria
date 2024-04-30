@@ -4,7 +4,7 @@ FROM node:18.16 AS build
 WORKDIR /appbuild
 
 COPY . .
-RUN npm config set registry https://registry.npmjs.org/
+
 RUN npm install --save-dev
 RUN npm run build
 

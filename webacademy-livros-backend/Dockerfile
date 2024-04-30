@@ -1,5 +1,5 @@
 # Estágio de construção da aplicação
-FROM node AS build
+FROM node:18.16 AS build
 
 WORKDIR /appbuild
 
@@ -8,11 +8,11 @@ COPY package-lock.json .
 COPY tsconfig.json .
 COPY ./src ./src
 
-RUN npm install
+RUN npm install --save-dev
 RUN npm run build
 
 # Estágio de execução da aplicação
-FROM node
+FROM node:18.16
 
 WORKDIR /app
 

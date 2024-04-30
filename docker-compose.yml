@@ -3,24 +3,27 @@ services:
     container_name: backend_livraria
     build: 
       context: ./webacademy-livros-backend
-    #volumes:
-    #definir salvamento dos logs
+    volumes:
+      #- backend_logs:/app/log
+      - ./webacademy-livros-backend/log:/app/log
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     networks:
       - livraria_network
+    restart: on-failure 
+    command:  sh -c "sleep 10 && npm start"
   frontend:
     container_name: frontend_livraria
     build:
       context: ./webacademy-livros-frontend
     ports:
-      - ${FRONTEND_PORT}:${FRONTEND_PORT}
-  db:
-    container_name: db_loja
+      - ${FRONTEND_PORT}:80
+  db_livraria:
+    container_name: db_livraria
     image: mysql:8.0
     volumes:
       - mysql_data:/var/lib/mysql
-      - mysql_config:/etc/mysql 
+      - ./webacademy-livros-config/configuracao:/docker-entrypoint-initdb.d
     ports:
       - ${MYSQL_PORT}:3306
     environment:
@@ -29,23 +32,22 @@ services:
     networks:
       - livraria_network
   phpmyadmin:
-    container_name: db_loja_gui
+    container_name: db_livraria_gui
     image: phpmyadmin
     ports:
       - 8080:80
     environment:
-      - PMA_HOST=db
+      - PMA_HOST=db_livraria
       - PMA_PORT=3306
       - PMA_USER=${PMA_USER}
       - PMA_PASSWORD=${PMA_PASSWORD}
     networks:
       - livraria_network
     depends_on:
-      - db
+      - db_livraria
 networks:
   livraria_network:
     driver: bridge
 volumes:
   mysql_data:
-  mysql_config:   
-
+  #backend_logs:  
