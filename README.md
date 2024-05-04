@@ -37,4 +37,6 @@ Eu removi o .git de todos os repositorios para facilitar na hora de fazer o clon
     4. version do topo do arquivo foi removido por conta do docker indicar que era depreciado.
     5. Aproveitei o arquivo de criação das tabelas e o com as recomendacoes de adições para criar um init.sql, assim o banco ja sobre com algumas informações.
     6. Apesar de ja esta funcionando resvolvi alterar o projeto para a versao com o PrismaORM.
-    7. versao com sequelizer no commit anterior.
+    7. POR CONTA DE PROBLEMAS COM O BACK A APLICACAO PODE PARA.
+    8. versao com sequelizer no commit anterior.
+    
