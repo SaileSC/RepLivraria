@@ -1,4 +1,4 @@
 dist/
-log/
+log/*
 node_modules/
 tsconfig.tsbuildinfo

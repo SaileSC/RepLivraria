@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS livros (
     url_imagem TEXT
 );
 
+SET NAMES utf8mb4;
+
 INSERT INTO livros (id, nome, sinopse, isbn, autores, url_imagem) VALUES
 ('9788555192555', 'PostgreSQL: Banco de dados para aplicações web modernas', 
 'Tecnologias de banco de dados dão suporte diário para operações e tomadas de

@@ -22,6 +22,9 @@ services:
       context: ./webacademy-livros-frontend
     ports:
       - ${FRONTEND_PORT}:80
+    depends_on:
+      db_livraria:
+        condition: service_healthy
 
   #DataBase config.
   db_livraria:
@@ -58,7 +61,8 @@ services:
     networks:
       - livraria_network
     depends_on:
-      - db_livraria
+      db_livraria:
+        condition: service_healthy
 networks:
   livraria_network:
     driver: bridge
