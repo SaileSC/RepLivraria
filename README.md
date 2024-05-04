@@ -32,8 +32,9 @@ Eu removi o .git de todos os repositorios para facilitar na hora de fazer o clon
 
 #### Obs:
     1. Tentei ao maximo não alterar os arquivos do professor. 
-    2. Uso do healthcheck para garantir que o banco ja estava no ar antes de iniciar os serviços que depedem dele.
-    3. version do topo do arquivo foi removido por conta do docker indicar que era depreciado.
-    4. Aproveitei o arquivo de criação das tabelas e o com as recomendacoes de adições para criar um init.sql, assim o banco ja sobre com algumas informações.
-    5. Apesar de ja esta funcionando resvolvi alterar o projeto para a versao com o PrismaORM.
-    6. versao com sequelizer no commit anterior.
+    2. Os logs serão sincronizados na pasta log dentro do backend.
+    3. Uso do healthcheck para garantir que o banco ja estava no ar antes de iniciar os serviços que depedem dele.
+    4. version do topo do arquivo foi removido por conta do docker indicar que era depreciado.
+    5. Aproveitei o arquivo de criação das tabelas e o com as recomendacoes de adições para criar um init.sql, assim o banco ja sobre com algumas informações.
+    6. Apesar de ja esta funcionando resvolvi alterar o projeto para a versao com o PrismaORM.
+    7. versao com sequelizer no commit anterior.
