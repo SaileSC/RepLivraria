@@ -1,16 +1,17 @@
-import { NextFunction, Request, Response } from "express";
-
 import { Dotenv } from "@/common/Dotenv";
 import { Logger } from "@/common/Logger";
 import { LivroParaAtualizarDTO } from "@/dominio/dto/LivroParaAtualizarDTO";
 import { LivroParaCriarDTO } from "@/dominio/dto/LivroParaCriarDTO";
 import { RegistroNaoSalvoError } from "@/dominio/excecoes/RegistroNaoSalvoError";
 import { LivroDTOMapper } from "@/dominio/objectmapper/LivroDTOMapper";
-import { LivroParaCriarMapper } from "@/dominio/objectmapper/LivroParaCriarMapper";
 import { LivrosService } from "@/dominio/servicos/LivrosService"
-import { gerarConexaoBDPrisma } from "@/infraestrutura/bd";
-import { LivroEntityMapper } from "@/infraestrutura/bd/LivroEntityMapper";
-import { PrismaLivrosRepository } from "@/infraestrutura/repositorios/prisma/PrismaLivrosRepository";
+import { SequelizeLivrosRepository } from "../repositorios/sequelize/SequelizeLivrosRepository";
+
+import {
+    NextFunction,
+    Request,
+    Response
+} from "express";
 
 Dotenv.carregarVariaveis();
 
@@ -39,12 +40,8 @@ class LivrosController {
 
     public constructor(){
         this.service = new LivrosService(
-            new PrismaLivrosRepository(
-                gerarConexaoBDPrisma(), 
-                new LivroEntityMapper()
-            ),
-            new LivroDTOMapper(),
-            new LivroParaCriarMapper()
+            new SequelizeLivrosRepository(),
+            new LivroDTOMapper()
         );
         this.logger = Logger.pegarInstancia();
     }

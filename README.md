@@ -36,7 +36,6 @@ Eu removi o .git de todos os repositorios para facilitar na hora de fazer o clon
     3. Uso do healthcheck para garantir que o banco ja estava no ar antes de iniciar os serviços que depedem dele.
     4. version do topo do arquivo foi removido por conta do docker indicar que era depreciado.
     5. Aproveitei o arquivo de criação das tabelas e o com as recomendacoes de adições para criar um init.sql, assim o banco ja sobre com algumas informações.
-    6. Apesar de ja esta funcionando resvolvi alterar o projeto para a versao com o PrismaORM.
-    7. POR CONTA DE PROBLEMAS COM O BACK A APLICACAO PODE PARA.
-    8. versao com sequelizer no commit anterior.
+    6. Uso da versao antes do PrismaORM (motivo : Havia alguns problemas quanto ao retorno de erros para o front e travamento do app)
+    7. versao com sequelizer no commit anterior.
     

@@ -1,12 +1,9 @@
-import { randomUUID } from "node:crypto";
-
 import { LivroDTO } from "../dto/LivroDTO";
 import { LivroParaAtualizarDTO } from "../dto/LivroParaAtualizarDTO";
 import { LivroParaCriarDTO } from "../dto/LivroParaCriarDTO";
 import { Livro } from "../modelos/Livro";
 import { LivroDTOMapper } from "../objectmapper/LivroDTOMapper";
 import { LivrosRepository } from "../repositorios/LivrosRepository";
-import { ObjectMapper } from "@/common/ObjectMapper";
 
 /**
  * 
@@ -25,17 +22,9 @@ class LivrosService {
 
     /**
      * 
-     * Instância de um mapeador de objetos de
-     * livros.
+     * Instância de um mapeador de objetos.
      */
-    private livroMapper: ObjectMapper<Livro, LivroDTO>;
-
-    /**
-     * 
-     * Instância de um mapeador de objetos de
-     * livros para criar.
-     */
-    private novoLivroMapper: ObjectMapper<LivroParaCriarDTO, Livro>;
+    private objectMapper: LivroDTOMapper;
 
     /**
      * 
@@ -44,20 +33,14 @@ class LivrosService {
      * de projetos Injeção de Dependências.
      * 
      * @param repository Instância de um repositório de livros.
-     * @param livroMapper Instância de um mapeador de objetos 
-     * de livro.
-     * @param novoLivroMapper Instância de um mapeador de objetos
-     * de livro para criar.
-     * 
+     * @param objectMapper Instância de um mapeador de objetos.
      */
     public constructor(
         repository: LivrosRepository,
-        livroMapper: ObjectMapper<Livro, LivroDTO>,
-        novoLivroMapper: ObjectMapper<LivroParaCriarDTO, Livro>
+        objectMapper: LivroDTOMapper
     ){
         this.repository = repository;
-        this.livroMapper = livroMapper;
-        this.novoLivroMapper = novoLivroMapper;
+        this.objectMapper = objectMapper;
     }
 
     /**
@@ -70,7 +53,7 @@ class LivrosService {
     public async buscarTodos(): Promise<LivroDTO[]> {
         const livros = await this.repository.buscarTodos();
 
-        return await this.livroMapper.mapearLista(livros);
+        return await this.objectMapper.mapearListaOrigemParaListaDestino(livros);
     }
 
     /**
@@ -84,7 +67,7 @@ class LivrosService {
     public async buscarLivroPorIsbn(isbn: string): Promise<LivroDTO> {
         const livro = await this.repository.buscarPorIsbn(isbn);
 
-        return await this.livroMapper.mapear(livro);
+        return await this.objectMapper.mapearOrigemParaDestino(livro);
     }
 
     /**
@@ -95,10 +78,16 @@ class LivrosService {
      * @returns Registro do novo livro criado.
      */
     public async cadastrarNovoLivro(novoLivro: LivroParaCriarDTO): Promise<LivroDTO> {
-        const livro = await this.novoLivroMapper.mapear(novoLivro);
-        await this.repository.salvar(livro);
+        const livro = new Livro({
+            nome: novoLivro.nome,
+            sinopse: novoLivro.sinopse,
+            isbn: novoLivro.isbn,
+            urlImagem: novoLivro.urlImagem,
+            autores: novoLivro.autores
+        });
+        const registro = await this.repository.salvar(livro);
 
-        return await this.livroMapper.mapear(livro);
+        return await this.objectMapper.mapearOrigemParaDestino(registro);
     }
 
     /**
@@ -112,14 +101,15 @@ class LivrosService {
     public async atualizarLivro(isbn: string, dadosParaAtualizar: LivroParaAtualizarDTO): Promise<LivroDTO> {
         const livro = await this.repository.buscarPorIsbn(isbn);
 
-        livro.nome = dadosParaAtualizar.nome;
-        livro.sinopse = dadosParaAtualizar.sinopse;
-        livro.autores = dadosParaAtualizar.autores;
-        livro.urlImagem = dadosParaAtualizar.urlImagem;
-
+        livro.set({
+            nome: dadosParaAtualizar.nome,
+            sinopse: dadosParaAtualizar.sinopse,
+            autores: dadosParaAtualizar.autores,
+            urlImagem: dadosParaAtualizar.urlImagem
+        });
         await this.repository.salvar(livro);
 
-        return await this.livroMapper.mapear(livro);
+        return await this.objectMapper.mapearOrigemParaDestino(livro);
     }
 
     /**

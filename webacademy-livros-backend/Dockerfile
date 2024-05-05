@@ -7,26 +7,22 @@ COPY package.json .
 COPY package-lock.json .
 COPY tsconfig.json .
 COPY ./src ./src
-COPY ./prisma ./prisma
 
-RUN npm ci
+RUN npm install --save-dev
 RUN npm run build
 
 # Estágio de execução da aplicação
-FROM node:18.16-slim
+FROM node:18.16
 
 WORKDIR /app
 
-RUN apt-get update -y
-RUN apt-get install -y openssl
-
-COPY package.json .
-COPY package-lock.json .
+COPY package.json ./
+COPY package-lock.json ./
 COPY .env .
-COPY ./prisma ./prisma
+COPY ./public ./public
 COPY --from=build /appbuild/dist ./dist
 
-RUN npm ci --omit=dev
+RUN npm install --production
 
 EXPOSE 4444
 
